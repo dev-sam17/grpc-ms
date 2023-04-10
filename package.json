@@ -1,0 +1,21 @@
+{
+  "name": "grpc-ms",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start:server": "nodemon server.js",
+    "start:client": "node client.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@grpc/grpc-js": "^1.8.13",
+    "@grpc/proto-loader": "^0.7.6",
+    "dotenv": "^16.0.3",
+    "minimist": "^1.2.8",
+    "mongoose": "^7.0.3",
+    "nodemon": "^2.0.22"
+  }
+}
