@@ -21,15 +21,43 @@ const packageDefinition = protoLoader.loadSync(PROTO_PATH, {
 
 const products_proto = grpc.loadPackageDefinition(packageDefinition).product;
 
-function getProducts(call, callback) {
-    callback(null, ProductsService.getProducts());
-  }
+// function getProducts(call, callback) {
+//     callback(null, ProductsService.getProducts());
+//   }
+
+async function getProducts(call, callback) {
+    const product = await ProductsService.getProducts();
+    callback(null, { product });
+}
+
+
+async function getProductById(call, callback) {
+    const id = call.request.id
+    const product = await ProductsService.getProductById(id);
+    callback(null, { product });
+}
+
+
+async function createProduct(call, callback) {
+    const product = await ProductsService.createProduct(call.request.name, call.name.price);
+    callback(null, { product });
+}
+
+async function deleteProductById(call, callback) {
+    const product = await ProductsService.deleteProductById(call.request.id);
+    callback(null, { product });
+}
 
 
 function main() {
     const server = new grpc.Server();
 
-    server.addService(products_proto.Products.service, { GetProducts: getProducts });
+    server.addService(products_proto.Products.service, {
+        GetProducts: getProducts,
+        GetProductById: getProductById,
+        CreateProduct: createProduct,
+        DeleteProductById: deleteProductById
+    });
 
     server.bindAsync(
         'localhost:3000',
