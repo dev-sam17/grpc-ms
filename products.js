@@ -9,16 +9,16 @@ mongoose.connect(mongoUrl)
 async function getProducts() {
 	const docs = await Product.find().select('name price _id').exec()
 
-    // let count: docs.length
-	const response =  docs.map(doc => {
-        return {
-            name: doc.name,
-            price: doc.price,
-            id: doc._id, 
-        }
-    })
-    // console.log(response)
-    return response
+	// let count: docs.length
+	const response = docs.map(doc => {
+		return {
+			name: doc.name,
+			price: doc.price,
+			id: doc._id,
+		}
+	})
+	// console.log(response)
+	return response
 }
 
 
@@ -26,17 +26,20 @@ async function getProductById(id) {
 	const doc = await Product.findById(id).select('name price _id').exec()
 	if (doc) {
 		const response = {
-			name: doc.name,
-			price: doc.price,
-			_id: doc._id,
+			message: 'Product Found',
+			product: {
+				name: doc.name,
+				price: doc.price,
+				_id: doc._id,
+			}
 		}
-        // console.log(response)
+		// console.log(response)
 		return response
 	} else {
 		const response = {
 			message: 'No valid Entry Found '
 		}
-        // console.log(response)
+		// console.log(response)
 		return response
 	}
 }
@@ -48,7 +51,7 @@ async function createProduct(name, price) {
 		price: price,
 	})
 	const result = await product.save()
-    // console.log(result)
+	// console.log(result)
 	return result
 }
 
@@ -56,14 +59,14 @@ async function deleteProductById(id) {
 	const result = await Product.findByIdAndDelete(id).exec()
 	const response = {
 		message: "Deleted product successfully",
-			deletedProduct: {
-				name: result.name,
-				price: result.price,
-				_id: result._id,
-			}
+		deletedProduct: {
+			name: result.name,
+			price: result.price,
+			_id: result._id,
+		}
 	}
-    // console.log(response)
-	return response 
+	// console.log(response)
+	return response
 }
 
 // getProductById('6428ee321a4670da495e97bd')
@@ -72,7 +75,7 @@ async function deleteProductById(id) {
 
 module.exports = {
 	getProducts,
-    getProductById,
-    createProduct,
-    deleteProductById
+	getProductById,
+	createProduct,
+	deleteProductById
 }

@@ -1,20 +1,14 @@
-const PROTO_PATH = __dirname + '/products.proto';
-
-const parseArgs = require('minimist');
 
 const grpc = require('@grpc/grpc-js');
-
 const protoLoader = require('@grpc/proto-loader');
+
+const PROTO_PATH = __dirname + '/products.proto';
 
 const packageDefinition = protoLoader.loadSync(PROTO_PATH, {
   keepCase: true,
-
   longs: String,
-
   enums: String,
-
   defaults: true,
-
   oneofs: true,
 });
 

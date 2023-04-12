@@ -1,49 +1,41 @@
 const PROTO_PATH = __dirname + '/products.proto';
 
 const grpc = require('@grpc/grpc-js');
-
 const protoLoader = require('@grpc/proto-loader');
 
 const ProductsService = require('./products')
 
-
 const packageDefinition = protoLoader.loadSync(PROTO_PATH, {
   keepCase: true,
-
   longs: String,
-
   enums: String,
-
   defaults: true,
-
   oneofs: true,
 });
 
 const products_proto = grpc.loadPackageDefinition(packageDefinition).product;
 
-// function getProducts(call, callback) {
-//     callback(null, ProductsService.getProducts());
-//   }
-
-async function getProducts(call, callback) {
-    const product = await ProductsService.getProducts();
-    callback(null, { product });
+async function GetProducts(call, callback) {
+    const products = await ProductsService.getProducts();
+    callback(null, { products });
 }
 
-
-async function getProductById(call, callback) {
+async function GetProductById(call, callback) {
     const id = call.request.id
-    const product = await ProductsService.getProductById(id);
-    callback(null, { product });
+    const response = await ProductsService.getProductById(id);
+    console.log('server ')
+    callback(null, response);
 }
 
 
-async function createProduct(call, callback) {
-    const product = await ProductsService.createProduct(call.request.name, call.name.price);
+async function CreateProduct(call, callback) {
+    const name = call.request.name
+    const price = call.request.price
+    const product = await ProductsService.createProduct(name, price);
     callback(null, { product });
 }
 
-async function deleteProductById(call, callback) {
+async function DeleteProductById(call, callback) {
     const product = await ProductsService.deleteProductById(call.request.id);
     callback(null, { product });
 }
@@ -53,10 +45,10 @@ function main() {
     const server = new grpc.Server();
 
     server.addService(products_proto.Products.service, {
-        GetProducts: getProducts,
-        GetProductById: getProductById,
-        CreateProduct: createProduct,
-        DeleteProductById: deleteProductById
+        GetProducts,
+        GetProductById,
+        CreateProduct,
+        DeleteProductById
     });
 
     server.bindAsync(

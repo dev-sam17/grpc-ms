@@ -8,9 +8,15 @@ message Product {
     float price = 3;
 }
 
+message GetProductByIdResponse {
+    string message = 1;
+    optional Product product = 2;
+}
+
 service Products {
     rpc GetProducts(Empty) returns (ProductList){}
-    rpc GetProductById(ProductId) returns (Product) {}
+    rpc GetProductById(ProductId) returns (GetProductByIdResponse) {}
+
     rpc CreateProduct(Create) returns (Product) {}
     rpc DeleteProductById(ProductId) returns (Product) {}
 }
@@ -27,5 +33,5 @@ message ProductId {
 message Empty {}
 
 message ProductList {
-    repeated Product product = 1;
+    repeated Product products = 1;
 }
