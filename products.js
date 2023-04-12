@@ -1,23 +1,19 @@
 const mongoose = require('mongoose')
 const Product = require('./model');
-require('dotenv').config();
 
 const mongoUrl = 'mongodb+srv://samrock17:' + process.env.MONGO_ATLAS_PW + '@cluster0.poipsye.mongodb.net/?retryWrites=true&w=majority'
-
 mongoose.connect(mongoUrl)
 
 async function getProducts() {
 	const docs = await Product.find().select('name price _id').exec()
 
-	// let count: docs.length
 	const response = docs.map(doc => {
 		return {
 			name: doc.name,
-			price: doc.price,
+			price: String(doc.price),
 			id: doc._id,
 		}
 	})
-	// console.log(response)
 	return response
 }
 
@@ -29,17 +25,16 @@ async function getProductById(id) {
 			message: 'Product Found',
 			product: {
 				name: doc.name,
-				price: doc.price,
-				_id: doc._id,
+				price: String(doc.price),
+				id: doc._id,
 			}
 		}
-		// console.log(response)
+		console.log('Get product by id', response)
 		return response
 	} else {
 		const response = {
 			message: 'No valid Entry Found '
 		}
-		// console.log(response)
 		return response
 	}
 }
@@ -51,6 +46,7 @@ async function createProduct(name, price) {
 		price: price,
 	})
 	const result = await product.save()
+	result.price = String(result.price);
 	return result
 }
 
@@ -61,7 +57,6 @@ async function deleteProductById(id) {
 			name: result.name,
 			price: result.price
 	}
-	// console.log(response)
 	return response
 }
 

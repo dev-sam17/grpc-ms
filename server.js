@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const PROTO_PATH = __dirname + '/products.proto';
 
 const grpc = require('@grpc/grpc-js');
@@ -23,7 +25,6 @@ async function GetProducts(call, callback) {
 async function GetProductById(call, callback) {
     const id = call.request.id
     const response = await ProductsService.getProductById(id);
-    console.log('server ')
     callback(null, response);
 }
 
@@ -31,8 +32,8 @@ async function GetProductById(call, callback) {
 async function CreateProduct(call, callback) {
     const name = call.request.name
     const price = call.request.price
-    const _product = await ProductsService.createProduct(name, price);
-    callback(null,  { _product });
+    const product = await ProductsService.createProduct(name, price);
+    callback(null,  { product });
 }
 
 async function DeleteProductById(call, callback) {

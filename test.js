@@ -1,46 +1,49 @@
 const client = require('./client')
 
+// get products
+if (true) {
+    client.GetProducts({}, (error, response) => {
 
-    //get all products
-// client.GetProducts({}, async (error, response) => {
-//     try {
-//         console.log(response)
-//     } catch (error) {
-//         return error
-//     }
-// })
+        console.error('Error', error)
+        console.log(response)
+
+    })
+}
 
 
 // get product by id
-// client.GetProductById({
-//     id: '643186f89eb3ae1c9b9d265a',
-// }, async (error, response) => {
-//     try {
-//         console.log(response)
-//     } catch (error) {
-//         return error
-//     }
-// })
+if (false) {
+    client.GetProductById({
+        id: '643186f89eb3ae1c9b9d265a',
+    }, (error, response) => {
+
+        console.error('Error', error)
+        console.log(response)
+
+    })
+}
 
 // create product
-// client.CreateProduct({
-//     name: 'Twilight',
-//     price: 23.99,
-// }, async (error, response) => {
-//     try {
-//         console.log(response)
-//     } catch (error) {
-//         return error
-//     }
-// })
+if (false) {
+    client.CreateProduct({
+        name: 'Twilight',
+        price: 23.99,
+    }, (error, response) => {
+
+        console.error('Error', error)
+        console.log(response)
+
+    })
+}
 
 // delete product by id
-client.DeleteProductById({
-    id: '6436c060dc48a738132ea917',
-}, async (error, response) => {
-    try {
+if (false) {
+    client.DeleteProductById({
+        id: '6436e1deb497ff2fb62e0f1b',
+    }, (error, response) => {
+
+        console.error('Error', error)
         console.log(response)
-    } catch (error) {
-        return error
-    }
-})
+
+    })
+}
