@@ -51,19 +51,15 @@ async function createProduct(name, price) {
 		price: price,
 	})
 	const result = await product.save()
-	// console.log(result)
 	return result
 }
 
 async function deleteProductById(id) {
 	const result = await Product.findByIdAndDelete(id).exec()
 	const response = {
-		message: "Deleted product successfully",
-		deletedProduct: {
+		    id: result._id,
 			name: result.name,
-			price: result.price,
-			_id: result._id,
-		}
+			price: result.price
 	}
 	// console.log(response)
 	return response

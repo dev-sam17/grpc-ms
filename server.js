@@ -31,13 +31,13 @@ async function GetProductById(call, callback) {
 async function CreateProduct(call, callback) {
     const name = call.request.name
     const price = call.request.price
-    const product = await ProductsService.createProduct(name, price);
-    callback(null, { product });
+    const _product = await ProductsService.createProduct(name, price);
+    callback(null,  { _product });
 }
 
 async function DeleteProductById(call, callback) {
-    const product = await ProductsService.deleteProductById(call.request.id);
-    callback(null, { product });
+    const deletedproduct = await ProductsService.deleteProductById(call.request.id);
+    callback(null, { deletedproduct });
 }
 
 
