@@ -10,6 +10,18 @@ if (true) {
     })
 }
 
+async function newFunctionGetProducts() {
+    //
+}
+
+async function randomFunction() {
+    console.log('something here')
+    const products = await newFunctionGetProducts()
+    
+    //
+    console.log('processing after getting products')
+    //
+}
 
 // get product by id
 if (false) {
