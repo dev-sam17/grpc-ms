@@ -1,7 +1,7 @@
 const client = require('./client')
 
 // get products
-if (true) {
+if (false) {
     client.GetProducts({}, (error, response) => {
 
         console.error('Error', error)
@@ -10,18 +10,26 @@ if (true) {
     })
 }
 
-async function newFunctionGetProducts() {
-    //
+function newFunctionGetProducts() {
+    return new Promise((resolve,reject) => {
+        client.GetProducts({}, (error, response) => {
+            resolve(response)
+        })
+    }).catch(error => {
+        console.log(error)
+    })
 }
 
 async function randomFunction() {
-    console.log('something here')
+    console.log('Getting Products')
     const products = await newFunctionGetProducts()
     
-    //
+    console.log(products)
     console.log('processing after getting products')
     //
 }
+
+randomFunction()
 
 // get product by id
 if (false) {
