@@ -11,22 +11,25 @@ if (false) {
 }
 
 function newFunctionGetProducts() {
-    return new Promise((resolve,reject) => {
+    return new Promise((resolve, reject) => {
         client.GetProducts({}, (error, response) => {
-            resolve(response)
+            if (response) {
+                resolve(response)
+            } else {
+                reject(error)
+            }
         })
-    }).catch(error => {
-        console.log(error)
     })
 }
 
 async function randomFunction() {
-    console.log('Getting Products')
-    const products = await newFunctionGetProducts()
-    
-    console.log(products)
-    console.log('processing after getting products')
-    //
+    try {
+        console.log('Getting Products')
+        const products = await newFunctionGetProducts()
+        console.log(products)
+    } catch (error) {
+        console.log(error)
+    }
 }
 
 randomFunction()
