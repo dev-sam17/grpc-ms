@@ -1,18 +1,18 @@
 const client = require('./client')
 
-
-// get products
+// Get products
 async function testGetProducts() {
     try {
         console.log('Getting Products')
         const products = await client.GetProducts()
+        // products.map(product => console.log('This is a product', product))
         console.log(products)
     } catch (error) {
         console.log("Error:" + error)
     }
 }
 
-// get product by id
+// Get product by id
 async function testGetProductById(id) {
     try {
         console.log('Getting Product By ID')
@@ -23,8 +23,7 @@ async function testGetProductById(id) {
     }
 }
 
-
-// create product
+// Create product
 async function testCreateProduct(name, price) {
     try {
         console.log('Creating Product')
@@ -35,19 +34,18 @@ async function testCreateProduct(name, price) {
     }
 }
 
-// delete product by id
+// Delete product by id
 async function testDeleteProduct(id) {
     try {
         console.log('Deleting Product')
-        const product = await client.DeleteProduct(id)
+        const product = await client.DeleteProductById(id)
         console.log(product)
     } catch (error) {
         console.log('Error : ' + error)
     }
 }
 
-
-// testGetProducts()
+testGetProducts()
 // testGetProductById("643bbb184bcf661be1f8f991")
-testCreateProduct('The Hobbits', '24.99')
-// testDeleteProduct('643186f89eb3ae1c9b9d265a')
+// testCreateProduct('The Hobbits', '24.99')
+// testDeleteProduct('643bbb184bcf661be1f8f991')

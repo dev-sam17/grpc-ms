@@ -20,13 +20,9 @@ const client = new product_proto.Products('localhost:3000', grpc.credentials.cre
 function GetProducts() {
   return new Promise((resolve, reject) => {
       client.GetProducts({}, (error, response) => {
-          if (response) {
-              resolve(response)
-          } else {
-              reject(error)
-          }
+            resolve(response)
       })
-  })
+  }).catch(error => console.error(error))
 }
 
 // get product by id
@@ -57,7 +53,7 @@ function CreateProduct(name, price) {
 }
 
 // delete product by id
-function DeleteProduct(id) {
+function DeleteProductById(id) {
   return new Promise((resolve, reject) => {
       client.DeleteProductById({id: id}, (error, response) => {
           if (response) {
@@ -73,7 +69,5 @@ module.exports = {
   GetProducts,
   GetProductById,
   CreateProduct,
-  DeleteProduct
+  DeleteProductById
 }
-
-                                    
