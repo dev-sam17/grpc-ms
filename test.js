@@ -2,7 +2,7 @@ const client = require('./client')
 
 
 // get products
-async function getProductsFunction() {
+async function testGetProducts() {
     try {
         console.log('Getting Products')
         const products = await client.GetProducts()
@@ -13,7 +13,7 @@ async function getProductsFunction() {
 }
 
 // get product by id
-async function getProductByIdFunction(id) {
+async function testGetProductById(id) {
     try {
         console.log('Getting Product By ID')
         const product = await client.GetProductById(id)
@@ -25,7 +25,7 @@ async function getProductByIdFunction(id) {
 
 
 // create product
-async function createProductFunction(name, price) {
+async function testCreateProduct(name, price) {
     try {
         console.log('Creating Product')
         const product = await client.CreateProduct(name, price)
@@ -36,7 +36,7 @@ async function createProductFunction(name, price) {
 }
 
 // delete product by id
-async function deleteProductFunction(id) {
+async function testDeleteProduct(id) {
     try {
         console.log('Deleting Product')
         const product = await client.DeleteProduct(id)
@@ -47,7 +47,7 @@ async function deleteProductFunction(id) {
 }
 
 
-getProductsFunction()
-// getProductByIdFunction("643186f89eb3ae1c9b9d265a")
-// createProductFunction('Lords of the Rings', '24.99')
-// deleteProductFunction('643186f89eb3ae1c9b9d265a')
+// testGetProducts()
+// testGetProductById("643bbb184bcf661be1f8f991")
+testCreateProduct('The Hobbits', '24.99')
+// testDeleteProduct('643186f89eb3ae1c9b9d265a')
