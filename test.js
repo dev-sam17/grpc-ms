@@ -1,15 +1,6 @@
 const client = require('./client')
 
 // get products
-if (false) {
-    client.GetProducts({}, (error, response) => {
-
-        console.error('Error', error)
-        console.log(response)
-
-    })
-}
-
 function newFunctionGetProducts() {
     return new Promise((resolve, reject) => {
         client.GetProducts({}, (error, response) => {
@@ -22,51 +13,96 @@ function newFunctionGetProducts() {
     })
 }
 
-async function randomFunction() {
+
+async function getProductsFunction() {
     try {
         console.log('Getting Products')
         const products = await newFunctionGetProducts()
         console.log(products)
     } catch (error) {
-        console.log(error)
+        console.log("Error:" + error)
     }
 }
 
-randomFunction()
-
 // get product by id
-if (false) {
-    client.GetProductById({
-        id: '643186f89eb3ae1c9b9d265a',
-    }, (error, response) => {
-
-        console.error('Error', error)
-        console.log(response)
-
+function newFunctionGetProductById(id) {
+    return new Promise((resolve, reject) => {
+        client.GetProductById({id:id}, (error, response) => {
+            if (response) {
+                resolve(response)
+            } else {
+                reject(error)
+            }
+        })
     })
+}
+
+async function getProductByIdFunction(id) {
+    try {
+        console.log('Getting Product By ID')
+        const product = await newFunctionGetProductById(id)
+        console.log(product)
+    } catch (error) {
+        console.log('Error : ' + error)
+    }
 }
 
 // create product
-if (false) {
-    client.CreateProduct({
-        name: 'Twilight',
-        price: 23.99,
-    }, (error, response) => {
-
-        console.error('Error', error)
-        console.log(response)
-
+function newFunctionCreateProduct(name, price) {
+    return new Promise((resolve, reject) => {
+        client.CreateProduct({name: name,
+        price: price}, (error, response) => {
+            if (response) {
+                resolve(response)
+            } else {
+                reject(error)
+            }
+        })
     })
+}
+
+async function createProductFunction(name, price) {
+    try {
+        console.log('Creating Product')
+        const product = await newFunctionCreateProduct(name, price)
+        console.log(product)
+    } catch (error) {
+        console.log('Error : ' + error)
+    }
 }
 
 // delete product by id
-if (false) {
-    client.DeleteProductById({
-        id: '6436e1deb497ff2fb62e0f1b',
-    }, (error, response) => {
-
-        console.error('Error', error)
-        console.log(response)
-
+function newFunctionDeleteProduct(id) {
+    return new Promise((resolve, reject) => {
+        client.DeleteProductById({id: id}, (error, response) => {
+            if (response) {
+                resolve(response)
+            } else {
+                reject(error)
+            }
+        })
     })
 }
+
+async function deleteProductFunction(id) {
+    try {
+        console.log('Deleting Product')
+        const product = await newFunctionDeleteProduct(id)
+        console.log(product)
+    } catch (error) {
+        console.log('Error : ' + error)
+    }
+}
+
+
+
+
+
+
+
+
+
+// getProductsFunction()
+// getProductByIdFunction("6436e1a88e185939f6e100f5")
+// createProductFunction('Game of Thrones', '23.99')
+// deleteProductFunction('6436bcd2f7803f1509a94a50')
