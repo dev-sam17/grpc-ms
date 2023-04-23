@@ -20,22 +20,35 @@ async function getProducts() {
 
 async function getProductById(id) {
 	const doc = await Product.findById(id).select('name price _id').exec()
-	if (doc) {
-		const response = {
-			message: 'Product Found',
-			product: {
-				name: doc.name,
-				price: String(doc.price),
-				id: doc._id,
+	try {
+		if (doc) {
+			const response = {
+				message: 'Product Found',
+				product: {
+					name: doc.name,
+					price: String(doc.price),
+					id: doc._id,
+				}
 			}
+			console.log('Get product by id', response)
+			return response
+		} else {
+			const response = {
+				message: 'No valid Entry Found '
+			}
+			return response
 		}
-		console.log('Get product by id', response)
-		return response
-	} else {
-		const response = {
-			message: 'No valid Entry Found '
-		}
-		return response
+	} catch (err) {
+		if (err instanceof mongoose.CastError) {
+			const response = {
+			  message: 'Invalid ID provided'
+			}
+			return response;
+		  } else {
+			// Handle other errors
+			console.error(err);
+			throw err; // re-throw the error to be handled by the caller
+		  }
 	}
 }
 
@@ -59,10 +72,6 @@ async function deleteProductById(id) {
 	}
 	return response
 }
-
-// getProductById('6428ee321a4670da495e97bd')
-// createProduct("Harry Potter: The Cursed Child", 14.99)
-// deleteProductById('6428ee321a4670da495e97bd')
 
 module.exports = {
 	getProducts,

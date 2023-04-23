@@ -63,3 +63,10 @@ function main() {
 }
 
 main();
+
+module.exports = {
+    GetProducts,
+    GetProductById,
+    CreateProduct,
+    DeleteProductById
+}
