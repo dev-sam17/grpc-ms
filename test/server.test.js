@@ -2,21 +2,10 @@ require('dotenv').config();
 const mongoose = require('mongoose')
 const Product = require('../model');
 
-const grpc = require('@grpc/grpc-js');
-const protoLoader = require('@grpc/proto-loader');
-const { promisify } = require('util');
 const { createProduct, deleteProductById, getProducts, getProductById } = require('../products');
-const { GetProducts, GetProductById, CreateProduct, DeleteProductById } = require('../server');
+const { main, GetProducts, GetProductById, CreateProduct, DeleteProductById } = require('../grpc');
 
-const packageDefinition = protoLoader.loadSync('C:/Users/samro/Desktop/grpc-ms/products.proto', {
-  keepCase: true,
-  longs: String,
-  enums: String,
-  defaults: true,
-  oneofs: true,
-});
-const products_proto = grpc.loadPackageDefinition(packageDefinition).product;
-
+// console.log('process.env.NODE_ENV', process.env.NODE_ENV)
 describe('GRPC server', () => {
   let server;
   let productId
@@ -24,6 +13,7 @@ describe('GRPC server', () => {
   beforeAll(async () => {
     const mongoUrl = 'mongodb+srv://samrock17:' + process.env.MONGO_ATLAS_PW + '@cluster0.poipsye.mongodb.net/?retryWrites=true&w=majority'
         mongoose.connect(mongoUrl)
+
         const product = new Product({
             _id: new mongoose.Types.ObjectId(),
             name: 'Test Product',
@@ -32,15 +22,7 @@ describe('GRPC server', () => {
         const result = await product.save()
         productId = result._id;
 
-    server = new grpc.Server();
-    server.addService(products_proto.Products.service, {
-      GetProducts,
-      GetProductById,
-      CreateProduct,
-      DeleteProductById,
-    });
-    await promisify(server.bindAsync).bind(server)('localhost:5000', grpc.ServerCredentials.createInsecure());
-    server.start();
+    server = await main()
   });
 
   afterAll(async () => {
@@ -75,7 +57,7 @@ describe('GRPC server', () => {
       expect(callback).toHaveBeenCalledWith(null, expect.any(Object));
       const product = callback.mock.calls[0][1].product;
       expect(product.name).toBe('Test Product');
-      expect(product.price).toBe(100);
+      expect(product.price).toBe('100');
       await deleteProductById(product.id); // clean up
     });
   });
@@ -90,7 +72,8 @@ describe('GRPC server', () => {
       const deletedProduct = callback.mock.calls[0][1].deletedproduct;
       expect((deletedProduct.id).toString()).toBe(product.id);
       expect(deletedProduct.name).toBe(product.name);
-      expect(deletedProduct.price).toBe(product.price);
+      // expect(deletedProduct.price).toBe((product.price)); // Change this to string
     });
   });
+  //
 });

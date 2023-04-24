@@ -1,5 +1,12 @@
 const mongoose = require('mongoose')
-const Product = require('./model');
+
+const productSchema = mongoose.Schema({
+    _id: mongoose.Schema.Types.ObjectId,
+    name: {type: String, required: true},
+    price: {type: Number, required: true}
+})
+
+const Product  = mongoose.model('Product', productSchema);
 
 const mongoUrl = 'mongodb+srv://samrock17:' + process.env.MONGO_ATLAS_PW + '@cluster0.poipsye.mongodb.net/?retryWrites=true&w=majority'
 mongoose.connect(mongoUrl)
@@ -19,8 +26,8 @@ async function getProducts() {
 
 
 async function getProductById(id) {
-	const doc = await Product.findById(id).select('name price _id').exec()
 	try {
+		const doc = await Product.findById(id).select('name price _id').exec()
 		if (doc) {
 			const response = {
 				message: 'Product Found',
@@ -38,17 +45,23 @@ async function getProductById(id) {
 			}
 			return response
 		}
-	} catch (err) {
-		if (err instanceof mongoose.CastError) {
+	} catch (error) {
+		if (error instanceof mongoose.CastError) {
+			console.log('cast error')
 			const response = {
 			  message: 'Invalid ID provided'
 			}
 			return response;
 		  } else {
 			// Handle other errors
-			console.error(err);
-			throw err; // re-throw the error to be handled by the caller
-		  }
+			console.error(error);
+			// throw err; // re-throw the error to be handled by the caller
+			const response = {
+				code: error.code,
+				message: error.message || 'Some error occured'
+			}
+			return response;
+		}
 	}
 }
 
@@ -59,7 +72,7 @@ async function createProduct(name, price) {
 		price: price,
 	})
 	const result = await product.save()
-	result.price = String(result.price);
+	result._doc.price = String(result._doc.price)
 	return result
 }
 

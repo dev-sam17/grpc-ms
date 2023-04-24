@@ -6,7 +6,7 @@
   "scripts": {
     "start:server": "nodemon server.js",
     "start:client": "node client.js",
-    "test": "jest",
+    "test": "NODE_ENV=test jest  --detectOpenHandles",
     "coverage": "jest --coverage"
   },
   "keywords": [],
