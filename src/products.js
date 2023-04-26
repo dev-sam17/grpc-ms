@@ -69,7 +69,6 @@ async function createProduct(name, price) {
 	return result
 }
 
-
 async function deleteProductById(id) {
 	const result = await Product.findByIdAndDelete(id).exec()
 	const response = {
