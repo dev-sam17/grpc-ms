@@ -1,22 +1,17 @@
-require('dotenv').config();
 const mongoose = require('mongoose')
-const productSchema = require('../productSchema')
-const { testDb, db } = require('./test-db')
+const { Product } = require('../src/db')
 
-
-const { createProduct, deleteProductById } = require('../products');
-const { main, GetProducts, GetProductById, CreateProduct, DeleteProductById } = require('../grpc');
+const { createProduct, deleteProductById } = require('../src/products');
+const { main, GetProducts, GetProductById, CreateProduct, DeleteProductById } = require('../src/grpc');
 
 // console.log('process.env.NODE_ENV', process.env.NODE_ENV)
 describe('GRPC server', () => {
   let server;
   let productId
-  let TestProduct = db.model('Product', productSchema);
 
   beforeAll(async () => {
-    testDb()
 
-    const product = new TestProduct({
+    const product = new Product({
       _id: new mongoose.Types.ObjectId(),
       name: 'Test Product',
       price: 100,
@@ -28,7 +23,7 @@ describe('GRPC server', () => {
   });
 
   afterAll(async () => {
-    await TestProduct.deleteMany({});
+    await Product.deleteMany({});
     await mongoose.connection.close();
     server.forceShutdown();
   });

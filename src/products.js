@@ -1,11 +1,7 @@
 const mongoose = require('mongoose');
-const { primaryDb, db } = require('./db')
-const productSchema = require('./productSchema')
-
-primaryDb()
+const { Product } = require('./db')
 
 async function getProducts() {
-	const Product = db.model('Product', productSchema);
 	const docs = await Product.find().select('name price _id').exec()
 
 	const response = docs.map(doc => {
@@ -20,9 +16,8 @@ async function getProducts() {
 }
 
 
-async function getProductById(id, useDb = db) {
+async function getProductById(id) {
 	try {
-		const Product = useDb.model('Product', productSchema);
 		const doc = await Product.findById(id).select('name price _id').exec()
 		if (doc) {
 			const response = {
@@ -62,8 +57,7 @@ async function getProductById(id, useDb = db) {
 }
 
 
-async function createProduct(name, price, useDb = db) {
-	const Product = useDb.model('Product', productSchema)
+async function createProduct(name, price) {
 	const product = new Product({
 		_id: new mongoose.Types.ObjectId(),
 		name: name,
@@ -76,8 +70,7 @@ async function createProduct(name, price, useDb = db) {
 }
 
 
-async function deleteProductById(id, useDb = db ) {
-	const Product = useDb.model('Product', productSchema)
+async function deleteProductById(id) {
 	const result = await Product.findByIdAndDelete(id).exec()
 	const response = {
 		    id: result._id,
