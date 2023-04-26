@@ -1,17 +1,11 @@
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
+const { primaryDb, db } = require('./db')
+const productSchema = require('./productSchema')
 
-const productSchema = mongoose.Schema({
-    _id: mongoose.Schema.Types.ObjectId,
-    name: {type: String, required: true},
-    price: {type: Number, required: true}
-})
-
-const Product  = mongoose.model('Product', productSchema);
-
-const mongoUrl = 'mongodb+srv://samrock17:' + process.env.MONGO_ATLAS_PW + '@cluster0.poipsye.mongodb.net/?retryWrites=true&w=majority'
-mongoose.connect(mongoUrl)
+primaryDb()
 
 async function getProducts() {
+	const Product = db.model('Product', productSchema);
 	const docs = await Product.find().select('name price _id').exec()
 
 	const response = docs.map(doc => {
@@ -21,12 +15,14 @@ async function getProducts() {
 			id: doc._id,
 		}
 	})
+	console.log(response)
 	return response
 }
 
 
-async function getProductById(id) {
+async function getProductById(id, useDb = db) {
 	try {
+		const Product = useDb.model('Product', productSchema);
 		const doc = await Product.findById(id).select('name price _id').exec()
 		if (doc) {
 			const response = {
@@ -65,7 +61,9 @@ async function getProductById(id) {
 	}
 }
 
-async function createProduct(name, price) {
+
+async function createProduct(name, price, useDb = db) {
+	const Product = useDb.model('Product', productSchema)
 	const product = new Product({
 		_id: new mongoose.Types.ObjectId(),
 		name: name,
@@ -73,16 +71,20 @@ async function createProduct(name, price) {
 	})
 	const result = await product.save()
 	result._doc.price = String(result._doc.price)
+	console.log(result)
 	return result
 }
 
-async function deleteProductById(id) {
+
+async function deleteProductById(id, useDb = db ) {
+	const Product = useDb.model('Product', productSchema)
 	const result = await Product.findByIdAndDelete(id).exec()
 	const response = {
 		    id: result._id,
 			name: result.name,
-			price: result.price
+			price: String(result.price)
 	}
+	console.log(response)
 	return response
 }
 

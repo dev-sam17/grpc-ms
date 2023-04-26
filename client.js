@@ -14,7 +14,7 @@ const packageDefinition = protoLoader.loadSync(PROTO_PATH, {
 
 const product_proto = grpc.loadPackageDefinition(packageDefinition).product;
 
-const client = new product_proto.Products('localhost:3000', grpc.credentials.createInsecure());
+const client = new product_proto.Products('localhost:55000', grpc.credentials.createInsecure());
 
 // get products
 function GetProducts() {

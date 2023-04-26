@@ -1,33 +1,35 @@
 require('dotenv').config();
 const mongoose = require('mongoose')
-const Product = require('../model');
+const productSchema = require('../productSchema')
+const { testDb, db } = require('./test-db')
 
-const { createProduct, deleteProductById, getProducts, getProductById } = require('../products');
+
+const { createProduct, deleteProductById } = require('../products');
 const { main, GetProducts, GetProductById, CreateProduct, DeleteProductById } = require('../grpc');
 
 // console.log('process.env.NODE_ENV', process.env.NODE_ENV)
 describe('GRPC server', () => {
   let server;
   let productId
+  let TestProduct = db.model('Product', productSchema);
 
   beforeAll(async () => {
-    const mongoUrl = 'mongodb+srv://samrock17:' + process.env.MONGO_ATLAS_PW + '@cluster0.poipsye.mongodb.net/?retryWrites=true&w=majority'
-        mongoose.connect(mongoUrl)
+    testDb()
 
-        const product = new Product({
-            _id: new mongoose.Types.ObjectId(),
-            name: 'Test Product',
-            price: 100,
-        })
-        const result = await product.save()
-        productId = result._id;
+    const product = new TestProduct({
+      _id: new mongoose.Types.ObjectId(),
+      name: 'Test Product',
+      price: 100,
+    })
+    const result = await product.save()
+    productId = result._id;
 
     server = await main()
   });
 
   afterAll(async () => {
-    await Product.deleteMany({});
-    
+    await TestProduct.deleteMany({});
+    await mongoose.connection.close();
     server.forceShutdown();
   });
 
@@ -72,8 +74,7 @@ describe('GRPC server', () => {
       const deletedProduct = callback.mock.calls[0][1].deletedproduct;
       expect((deletedProduct.id).toString()).toBe(product.id);
       expect(deletedProduct.name).toBe(product.name);
-      // expect(deletedProduct.price).toBe((product.price)); // Change this to string
+      expect(deletedProduct.price).toBe((product.price));
     });
   });
-  //
 });
