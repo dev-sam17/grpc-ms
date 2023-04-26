@@ -1,12 +1,12 @@
 const mongoose = require('mongoose')
-const productSchema = require('../productSchema')
+const productSchema = require('../src/productSchema')
 
 const { testDb, db } = require('./test-db')
 
 const { getProducts,
 	getProductById,
 	createProduct,
-	deleteProductById} = require('../products')
+	deleteProductById} = require('../src/products')
 
 
 describe('Product', () => {
