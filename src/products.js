@@ -15,7 +15,6 @@ async function getProducts() {
 	return response
 }
 
-
 async function getProductById(id) {
 	try {
 		const doc = await Product.findById(id).select('name price _id').exec()
